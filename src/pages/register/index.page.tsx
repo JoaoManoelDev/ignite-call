@@ -5,6 +5,7 @@ import { ArrowRight } from 'phosphor-react'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { api } from '../../lib/axios'
 import { Form, FormError, Header, RegisterContainer } from './styles'
 
 const registerFormSchema = z.object({
@@ -39,7 +40,14 @@ export default function Register() {
   }, [router.query?.username, setValue])
 
   async function handleRegister(data: RegisterFormData) {
-    console.log(data)
+    try {
+      await api.post('/users', {
+        username: data.username,
+        name: data.name,
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
