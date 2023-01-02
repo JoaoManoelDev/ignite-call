@@ -6,7 +6,7 @@ export default async function handle(
   request: NextApiRequest,
   response: NextApiResponse,
 ) {
-  if (request.method !== 'POST') return response.status(405).end
+  if (request.method !== 'POST') return response.status(405).end()
 
   const { username, name } = request.body
 
