@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -19,6 +20,8 @@ interface Availability {
 export function CalendarStep() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [availability, setAvailability] = useState<Availability | null>(null)
+
+  console.log(availability)
 
   const router = useRouter()
 
@@ -58,7 +61,7 @@ export function CalendarStep() {
             {availability?.possibleTimes.map((hour) => {
               return (
                 <TimePickerItem
-                  key={hour}
+                  key={`${hour} + ${randomUUID()}`}
                   disabled={!availability.availableTimes.includes(hour)}
                 >
                   {String(hour).padStart(2, '0')}:00h
