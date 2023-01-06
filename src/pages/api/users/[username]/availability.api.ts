@@ -54,5 +54,24 @@ export default async function handle(
     },
   )
 
-  return response.status(200).json({ possibleTimes })
+  const blockedTimes = await prisma.scheduling.findMany({
+    select: {
+      date: true,
+    },
+    where: {
+      user_id: user.id,
+      date: {
+        gte: referencesDate.set('hour', startHour).toDate(),
+        lt: referencesDate.set('hour', endHour).toDate(),
+      },
+    },
+  })
+
+  const availableTimes = possibleTimes.filter((time) => {
+    return !blockedTimes.some(
+      (blockedTime) => blockedTime.date.getHours() === time,
+    )
+  })
+
+  return response.status(200).json({ possibleTimes, availableTimes })
 }
